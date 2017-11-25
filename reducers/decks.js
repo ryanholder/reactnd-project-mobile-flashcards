@@ -1,24 +1,23 @@
 import {
-  REQUEST_CARDS,
-  RECEIVE_CARDS,
+  REQUEST_DECKS,
+  RECEIVE_DECKS,
 } from '../actions/types';
 
 const decks = (state = {
   isFetching: false,
-  items: [],
+  items: {},
 }, action) => {
   switch (action.type) {
-    case REQUEST_CARDS:
+    case REQUEST_DECKS:
       return {
         ...state,
         isFetching: true,
       };
-    case RECEIVE_CARDS:
+    case RECEIVE_DECKS:
       return {
         ...state,
         isFetching: false,
-        items: action.categories,
-        lastUpdated: action.receivedAt,
+        items: action.decks,
       };
     default:
       return state;
