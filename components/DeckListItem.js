@@ -69,7 +69,6 @@ class DeckListItem extends React.Component {
 }
 
 DeckListItem.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   deck: PropTypes.shape({
     title: PropTypes.string,
     cards: PropTypes.array,
@@ -83,10 +82,11 @@ DeckListItem.propTypes = {
   }).isRequired,
 };
 
-function mapStateToProps({ decks }, { navigation }) {
+const mapStateToProps = (state, { navigation }) => {
+  const { decks } = state;
   return {
     deck: decks.items[navigation.state.params.title],
   };
-}
+};
 
 export default connect(mapStateToProps)(DeckListItem);

@@ -73,7 +73,7 @@ class AddNewDeck extends React.Component {
     const { title } = this.state;
     return (
       <View style={[styles.center, styles.container]}>
-        <Text style={styles.label}>Enter a name for your new deck.</Text>
+        <Text style={styles.label}>Enter a name for your new deck</Text>
         <TextInput
           value={title}
           style={styles.input}
