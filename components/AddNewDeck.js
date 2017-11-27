@@ -50,7 +50,6 @@ class AddNewDeck extends React.Component {
 
   toHome = () => {
     const { navigation } = this.props;
-    console.log(navigation);
     navigation.dispatch(NavigationActions.back({ key: 'AddNewDeck' }));
   }
 
