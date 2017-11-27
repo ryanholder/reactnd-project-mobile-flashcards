@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
-import * as API from '../utils/api';
-import { white, gray, black, purple } from '../utils/colors';
-// import { saveDeckTitle } from '../actions';
+import { addNewDeckToAsyncStorage } from '../utils/api';
+import { white, purple } from '../utils/colors';
+import { addNewDeck } from '../actions/decks';
 
 const styles = StyleSheet.create({
   center: {
@@ -47,6 +48,12 @@ class AddNewDeck extends React.Component {
     title: '',
   }
 
+  toHome = () => {
+    const { navigation } = this.props;
+    console.log(navigation);
+    navigation.dispatch(NavigationActions.back({ key: 'AddNewDeck' }));
+  }
+
   handleTitleChange = (title) => {
     this.setState({
       title,
@@ -54,24 +61,13 @@ class AddNewDeck extends React.Component {
   }
 
   handleSubmit = () => {
-    const { saveDeckTitle, navigation } = this.props
-    const { title } = this.state
+    const { dispatch } = this.props;
+    const { title } = this.state;
 
-    // API.saveDeckTitle({title})
-    //   .then(() => {
-    //     saveDeckTitle({title})
-
-    //     navigation.navigate(
-    //       'DeckDetail',
-    //       {
-    //         title
-    //       }
-    //     )
-
-    //     this.setState({
-    //       title: ''
-    //     })
-    //   })
+    addNewDeckToAsyncStorage(title)
+      .then(dispatch(addNewDeck(title)))
+      .then(this.toHome())
+      .then(() => this.setState(() => ({ title: '' })));
   }
 
   render() {
@@ -85,7 +81,7 @@ class AddNewDeck extends React.Component {
           placeholder="Deck Title"
           onChangeText={this.handleTitleChange}
         />
-        <TouchableOpacity style={styles.buttonSubmit}>
+        <TouchableOpacity style={styles.buttonSubmit} onPress={this.handleSubmit}>
           <Text style={styles.buttonTextSubmit}>Submit</Text>
         </TouchableOpacity>
       </View>
@@ -93,24 +89,15 @@ class AddNewDeck extends React.Component {
   }
 }
 
-// <TouchableOpacity style={styles.buttonSubmit} onPress={this.handleSubmit}>
-// <Text style={styles.buttonTextSubmit}>Submit</Text>
-// </TouchableOpacity>
+AddNewDeck.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    dispatch: PropTypes.func,
+    goBack: PropTypes.func,
+    navigate: PropTypes.func,
+    setParams: PropTypes.func,
+    state: PropTypes.object,
+  }).isRequired,
+};
 
-
-// function mapStateToProps (state, { navigation }) {
-//   return {}
-// }
-
-// function mapDispatchToProps (dispatch, { navigation }) {
-//   return {
-//     saveDeckTitle: (data) => dispatch(saveDeckTitle(data))
-//   }
-// }
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps,
-// )(AddNewDeck)
-
-export default AddNewDeck;
+export default connect()(AddNewDeck);

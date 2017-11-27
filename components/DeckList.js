@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { AppLoading } from 'expo';
 import { connect } from 'react-redux';
-import { View, StyleSheet, Text, Platform } from 'react-native';
-import { fetchDecks } from '../utils/api';
+import { View, StyleSheet, Text, Platform, ScrollView, TouchableOpacity } from 'react-native';
+import { fetchDecksFromAsyncStorage } from '../utils/api';
 import { receiveDecks } from '../actions/decks';
-import { white } from '../utils/colors';
+import { white, black } from '../utils/colors';
 
 const styles = StyleSheet.create({
   item: {
@@ -26,8 +26,15 @@ const styles = StyleSheet.create({
   },
   noDataText: {
     fontSize: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
+  },
+  list: {
+    flex: 1,
+    alignSelf: 'stretch',
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: black,
   },
 });
 
@@ -39,10 +46,16 @@ class DeckList extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
 
-    fetchDecks()
+    fetchDecksFromAsyncStorage()
       .then(decks => dispatch(receiveDecks(decks)))
       .then(() => this.setState(() => ({ ready: true })));
   }
+
+  renderDeckList = ({ item }) => (
+    <View>
+      <Text style={styles.title}>{item.title}</Text>
+    </View>
+  );
 
   render() {
     const { ready } = this.state;
@@ -54,16 +67,25 @@ class DeckList extends React.Component {
 
     return (
       <View>
-        {Object.keys(decks.items).map(deck => (
-          <View style={styles.item} key={deck}>
-            <Text style={styles.noDataText}>
-              {decks.items[deck].title}
-            </Text>
-            <Text style={styles.noDataText}>
-              {decks.items[deck].cards.length }
-            </Text>
-          </View>
-        ))}
+        {(Object.keys(decks.items).length === 0 && <Text>Create your first deck!!</Text>) ||
+        <ScrollView>
+          {Object.keys(decks.items).map(deck => (
+            <TouchableOpacity
+              key={deck}
+              style={styles.deck}
+            >
+              <View style={styles.item} key={deck}>
+                <Text style={styles.noDataText}>
+                  {decks.items[deck].title}
+                </Text>
+                <Text style={styles.noDataText}>
+                  {decks.items[deck].cards.length} cards
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        }
       </View>
     );
   }
