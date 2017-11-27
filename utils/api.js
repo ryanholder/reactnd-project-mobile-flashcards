@@ -18,3 +18,16 @@ export const addNewDeckToAsyncStorage = title =>
       cards: [],
     },
   }));
+
+export const addNewCardToAsyncStorage = (title, question, answer) =>
+  AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify({
+    [title]: {
+      title,
+      cards: [
+        {
+          question,
+          answer,
+        },
+      ],
+    },
+  }));

@@ -2,6 +2,7 @@ import {
   REQUEST_DECKS,
   RECEIVE_DECKS,
   ADD_NEW_DECK,
+  ADD_NEW_CARD,
 } from '../actions/types';
 
 const decks = (state = {
@@ -29,6 +30,24 @@ const decks = (state = {
           [action.deck]: {
             title: action.deck,
             cards: [],
+          },
+        },
+      };
+    case ADD_NEW_CARD:
+      return {
+        ...state,
+        isFetching: false,
+        items: {
+          ...state.items,
+          [action.deck]: {
+            title: action.deck,
+            cards: [
+              ...state.items[action.deck].cards,
+              {
+                question: action.question,
+                answer: action.answer,
+              },
+            ],
           },
         },
       };

@@ -15,3 +15,12 @@ export function addNewDeck(deck) {
     deck,
   };
 }
+
+export function addNewCard(deck, question, answer) {
+  return {
+    type: types.ADD_NEW_CARD,
+    deck,
+    question,
+    answer,
+  };
+}
