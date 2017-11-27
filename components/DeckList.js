@@ -59,7 +59,7 @@ class DeckList extends React.Component {
 
   render() {
     const { ready } = this.state;
-    const { decks } = this.props;
+    const { decks, navigation } = this.props;
 
     if (ready === false) {
       return <AppLoading />;
@@ -73,6 +73,12 @@ class DeckList extends React.Component {
             <TouchableOpacity
               key={deck}
               style={styles.deck}
+              onPress={() => {
+                navigation.navigate('DeckListItem', {
+                  title: decks.items[deck].title,
+                  noCards: decks.items[deck].cards.length,
+                });
+              }}
             >
               <View style={styles.item} key={deck}>
                 <Text style={styles.noDataText}>
@@ -96,6 +102,13 @@ DeckList.propTypes = {
   decks: PropTypes.shape({
     isFetching: PropTypes.bool,
     items: PropTypes.object,
+  }).isRequired,
+  navigation: PropTypes.shape({
+    dispatch: PropTypes.func,
+    goBack: PropTypes.func,
+    navigate: PropTypes.func,
+    setParams: PropTypes.func,
+    state: PropTypes.object,
   }).isRequired,
 };
 
