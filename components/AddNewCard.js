@@ -49,11 +49,6 @@ class AddNewCard extends React.Component {
     answer: '',
   }
 
-  toDeckListItem = () => {
-    const { navigation } = this.props;
-    navigation.dispatch(NavigationActions.back({ key: 'AddNewCard' }));
-  }
-
   handleQuestionChange = (question) => {
     this.setState({
       question,
@@ -67,12 +62,12 @@ class AddNewCard extends React.Component {
   }
 
   handleSubmit = () => {
-    const { dispatch, title } = this.props;
+    const { dispatch, title, navigation } = this.props;
     const { question, answer } = this.state;
 
     addNewCardToAsyncStorage(title, question, answer)
       .then(dispatch(addNewCard(title, question, answer)))
-      .then(this.toDeckListItem())
+      .then(navigation.goBack())
       .then(() => this.setState(() => ({
         question: '',
         answer: '',
@@ -107,6 +102,7 @@ class AddNewCard extends React.Component {
 
 AddNewCard.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
   navigation: PropTypes.shape({
     dispatch: PropTypes.func,
     goBack: PropTypes.func,
@@ -114,14 +110,14 @@ AddNewCard.propTypes = {
     setParams: PropTypes.func,
     state: PropTypes.object,
   }).isRequired,
-  title: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state, { navigation }) => {
   const { decks } = state;
+  const { title } = navigation.state.params;
   return {
     decks,
-    title: navigation.state.params.title,
+    title,
   };
 };
 
