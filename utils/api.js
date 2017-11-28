@@ -12,6 +12,9 @@ export const fetchDecksFromAsyncStorage = async () => {
   }
 };
 
+export const fetchDeckFromAsyncStorage = title =>
+  fetchDecksFromAsyncStorage().then(decks => decks[title]);
+
 export const addNewDeckToAsyncStorage = title =>
   AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify({
     [title]: {
@@ -21,14 +24,12 @@ export const addNewDeckToAsyncStorage = title =>
   }));
 
 export const addNewCardToAsyncStorage = (title, question, answer) =>
-  AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify({
-    [title]: {
-      title,
-      cards: [
-        {
-          question,
-          answer,
-        },
-      ],
-    },
-  }));
+  fetchDeckFromAsyncStorage(title).then((deck) => {
+    deck.cards.push({
+      question,
+      answer,
+    });
+    return AsyncStorage.mergeItem(DECKS_STORAGE_KEY, JSON.stringify({
+      [title]: deck,
+    }));
+  });
