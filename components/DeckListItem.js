@@ -49,8 +49,8 @@ class DeckListItem extends React.Component {
 
     return (
       <View style={[styles.center, styles.container]}>
-        <Text style={styles.label}>{navigation.state.params.title}</Text>
-        <Text style={styles.label}>{navigation.state.params.noCards} Cards</Text>
+        <Text style={styles.label}>{deck.title}</Text>
+        <Text style={styles.label}>{deck.cards.length} Cards</Text>
         <TouchableOpacity
           style={styles.buttonSubmit}
           onPress={() => navigation.navigate('AddNewCard', { title: deck.title })}
