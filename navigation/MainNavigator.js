@@ -2,6 +2,7 @@ import { StackNavigator } from 'react-navigation';
 import Tabs from './Tabs';
 import DeckListItem from '../components/DeckListItem';
 import AddNewCard from '../components/AddNewCard';
+import QuizCards from '../components/QuizCards';
 import { purple, white } from '../utils/colors';
 
 const MainNavigator = StackNavigator({
@@ -19,6 +20,15 @@ const MainNavigator = StackNavigator({
   },
   AddNewCard: {
     screen: AddNewCard,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      },
+    },
+  },
+  QuizCards: {
+    screen: QuizCards,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
