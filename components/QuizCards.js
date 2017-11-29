@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import FlipCard from 'react-native-flip-card';
 import {
   View,
   StyleSheet,
@@ -8,7 +9,6 @@ import {
   TouchableOpacity,
   Button,
   Platform,
-  Animated,
 } from 'react-native';
 
 import { white, green, red } from '../utils/colors';
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     borderRadius: Platform.OS === 'ios' ? 16 : 2,
     padding: 20,
     margin: 20,
-    justifyContent: 'flex-start',
+    borderWidth: 0,
     shadowRadius: 3,
     shadowOpacity: 0.8,
     shadowColor: 'rgba(0, 0, 0, 0.24)',
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   question: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   label: {
     fontSize: 30,
@@ -76,44 +77,30 @@ const styles = StyleSheet.create({
   toggleQuestionAnswer: {
     color: red,
   },
-  flipCard: {
-    backfaceVisibility: 'hidden',
+  cardCount: {
+    alignSelf: 'flex-start',
+  },
+  face: {
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  flipCardBack: {
-    position: 'absolute',
-    top: 0,
-  },
-  container: {
     flex: 1,
+  },
+  back: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  quizResults: {
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 1,
   },
 });
 
 class QuizCards extends React.Component {
   state = {
     counter: 0,
-    showAnswer: false,
     lastCard: false,
     correctAnswers: 0,
-  }
-
-  componentWillMount() {
-    this.animatedValue = new Animated.Value(0);
-    this.value = 0;
-    this.animatedValue.addListener(({ value }) => {
-      this.value = value;
-    });
-    this.frontInterpolate = this.animatedValue.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['0deg', '180deg'],
-    });
-    this.backInterpolate = this.animatedValue.interpolate({
-      inputRange: [0, 180],
-      outputRange: ['180deg', '360deg'],
-    });
+    flip: false,
   }
 
   handleSubmit = (answer) => {
@@ -128,71 +115,46 @@ class QuizCards extends React.Component {
     });
   }
 
-  flipCard() {
-    if (this.value >= 90) {
-      Animated.spring(this.animatedValue, {
-        toValue: 0,
-        friction: 8,
-        tension: 10,
-      }).start();
-    } else {
-      Animated.spring(this.animatedValue, {
-        toValue: 180,
-        friction: 8,
-        tension: 10,
-      }).start();
-    }
-  }
-
-  handleCardFlip = () => {
-    this.setState((prevState) => {
-      return {
-        showAnswer: !prevState.showAnswer,
-      };
-    });
-  }
-
   render() {
     const {
       lastCard,
       correctAnswers,
       counter,
-      showAnswer,
     } = this.state;
     const { deck, noCards } = this.props;
     const card = deck.cards[this.state.counter];
-    const frontAnimatedStyle = {
-      transform: [
-        { rotateY: this.frontInterpolate },
-      ],
-    };
-    const backAnimatedStyle = {
-      transform: [
-        { rotateY: this.backInterpolate },
-      ],
-    };
 
     return (
-      <View style={[styles.center, styles.container]}>
+      <View style={styles.center}>
         {lastCard ?
-          <View style={styles.item}>
-            <Text>{`${correctAnswers} / ${noCards}`}</Text>
+          <View style={[styles.item, styles.quizResults]}>
+            <Text style={styles.label}>
+              Quiz Completed!!
+            </Text>
+            <Text>{`You scored ${correctAnswers} out of ${noCards}`}</Text>
           </View> :
-          <View style={styles.container}>
-            <Animated.View style={[styles.flipCard, frontAnimatedStyle, styles.item, styles.question]}>
+          <FlipCard
+            style={[styles.card, styles.item]}
+            friction={6}
+            perspective={1000}
+            flipHorizontal
+            flipVertical={false}
+            flip={this.state.flip}
+            clickable={false}
+          >
+            <View style={styles.face}>
               <View style={styles.cardCount}>
                 <Text>{`Card ${counter + 1} of ${noCards}`}</Text>
               </View>
-              <View style={[styles.question]}>
+              <View style={styles.question}>
                 <Text style={styles.label}>
                   {card.question}
                 </Text>
-                <TouchableOpacity
-                  style={styles.buttonCorrect}
-                  onPress={() => this.flipCard()}
-                >
-                  <Text style={styles.buttonTextSubmit}>Answer</Text>
-                </TouchableOpacity>
+                <Button
+                  color={red}
+                  onPress={() => { this.setState({ flip: !this.state.flip }); }}
+                  title="Answer"
+                />
                 <TouchableOpacity
                   style={styles.buttonCorrect}
                   onPress={() => this.handleSubmit(true)}
@@ -206,21 +168,21 @@ class QuizCards extends React.Component {
                   <Text style={styles.buttonTextSubmit}>Incorrect</Text>
                 </TouchableOpacity>
               </View>
-            </Animated.View>
-            <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.item, styles.question]}>
+            </View>
+
+            <View style={styles.back}>
               <View style={styles.cardCount}>
                 <Text>{`Card ${counter + 1} of ${noCards}`}</Text>
               </View>
-              <View style={[styles.question]}>
+              <View style={styles.question}>
                 <Text style={styles.label}>
                   {card.answer}
                 </Text>
-                <TouchableOpacity
-                  style={styles.buttonCorrect}
-                  onPress={() => this.flipCard()}
-                >
-                  <Text style={styles.buttonTextSubmit}>Question</Text>
-                </TouchableOpacity>
+                <Button
+                  color={red}
+                  onPress={() => { this.setState({ flip: !this.state.flip }); }}
+                  title="Question"
+                />
                 <TouchableOpacity
                   style={styles.buttonCorrect}
                   onPress={() => this.handleSubmit(true)}
@@ -234,8 +196,9 @@ class QuizCards extends React.Component {
                   <Text style={styles.buttonTextSubmit}>Incorrect</Text>
                 </TouchableOpacity>
               </View>
-            </Animated.View>
-          </View>}
+            </View>
+          </FlipCard>
+        }
       </View>
     );
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { white, purple } from '../utils/colors';
+import { white, orange } from '../utils/colors';
 
 const styles = StyleSheet.create({
   center: {
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   buttonSubmit: {
     alignItems: 'center',
-    backgroundColor: purple,
+    backgroundColor: orange,
     borderRadius: 5,
     marginTop: 10,
     padding: 10,
