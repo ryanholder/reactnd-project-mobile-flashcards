@@ -1,7 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, Text, TouchableOpacity, Button, Platform } from 'react-native';
 import { connect } from 'react-redux';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Button,
+  Platform,
+  Animated,
+} from 'react-native';
 
 import { white, green, red } from '../utils/colors';
 
@@ -68,6 +76,20 @@ const styles = StyleSheet.create({
   toggleQuestionAnswer: {
     color: red,
   },
+  flipCard: {
+    backfaceVisibility: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  flipCardBack: {
+    position: 'absolute',
+    top: 0,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 class QuizCards extends React.Component {
@@ -76,6 +98,22 @@ class QuizCards extends React.Component {
     showAnswer: false,
     lastCard: false,
     correctAnswers: 0,
+  }
+
+  componentWillMount() {
+    this.animatedValue = new Animated.Value(0);
+    this.value = 0;
+    this.animatedValue.addListener(({ value }) => {
+      this.value = value;
+    });
+    this.frontInterpolate = this.animatedValue.interpolate({
+      inputRange: [0, 180],
+      outputRange: ['0deg', '180deg'],
+    });
+    this.backInterpolate = this.animatedValue.interpolate({
+      inputRange: [0, 180],
+      outputRange: ['180deg', '360deg'],
+    });
   }
 
   handleSubmit = (answer) => {
@@ -88,6 +126,22 @@ class QuizCards extends React.Component {
         correctAnswers: answer ? prevState.correctAnswers + 1 : prevState.correctAnswers,
       };
     });
+  }
+
+  flipCard() {
+    if (this.value >= 90) {
+      Animated.spring(this.animatedValue, {
+        toValue: 0,
+        friction: 8,
+        tension: 10,
+      }).start();
+    } else {
+      Animated.spring(this.animatedValue, {
+        toValue: 180,
+        friction: 8,
+        tension: 10,
+      }).start();
+    }
   }
 
   handleCardFlip = () => {
@@ -107,46 +161,80 @@ class QuizCards extends React.Component {
     } = this.state;
     const { deck, noCards } = this.props;
     const card = deck.cards[this.state.counter];
+    const frontAnimatedStyle = {
+      transform: [
+        { rotateY: this.frontInterpolate },
+      ],
+    };
+    const backAnimatedStyle = {
+      transform: [
+        { rotateY: this.backInterpolate },
+      ],
+    };
 
     return (
       <View style={[styles.center, styles.container]}>
-
-
         {lastCard ?
-          <View>
+          <View style={styles.item}>
             <Text>{`${correctAnswers} / ${noCards}`}</Text>
           </View> :
-
-          <View style={styles.item}>
-            <View style={styles.cardCount}>
-              <Text>{`Card ${counter + 1} of ${noCards}`}</Text>
-            </View>
-            <View style={[styles.question]}>
-              {!showAnswer ?
+          <View style={styles.container}>
+            <Animated.View style={[styles.flipCard, frontAnimatedStyle, styles.item, styles.question]}>
+              <View style={styles.cardCount}>
+                <Text>{`Card ${counter + 1} of ${noCards}`}</Text>
+              </View>
+              <View style={[styles.question]}>
                 <Text style={styles.label}>
                   {card.question}
-                </Text> :
+                </Text>
+                <TouchableOpacity
+                  style={styles.buttonCorrect}
+                  onPress={() => this.flipCard()}
+                >
+                  <Text style={styles.buttonTextSubmit}>Answer</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonCorrect}
+                  onPress={() => this.handleSubmit(true)}
+                >
+                  <Text style={styles.buttonTextSubmit}>Correct</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonIncorrect}
+                  onPress={() => this.handleSubmit(false)}
+                >
+                  <Text style={styles.buttonTextSubmit}>Incorrect</Text>
+                </TouchableOpacity>
+              </View>
+            </Animated.View>
+            <Animated.View style={[backAnimatedStyle, styles.flipCard, styles.item, styles.question]}>
+              <View style={styles.cardCount}>
+                <Text>{`Card ${counter + 1} of ${noCards}`}</Text>
+              </View>
+              <View style={[styles.question]}>
                 <Text style={styles.label}>
                   {card.answer}
-                </Text>}
-              <Button
-                color={red}
-                onPress={() => this.handleCardFlip()}
-                title={showAnswer ? 'Question' : 'Answer'}
-              />
-              <TouchableOpacity
-                style={styles.buttonCorrect}
-                onPress={() => this.handleSubmit(true)}
-              >
-                <Text style={styles.buttonTextSubmit}>Correct</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonIncorrect}
-                onPress={() => this.handleSubmit(false)}
-              >
-                <Text style={styles.buttonTextSubmit}>Incorrect</Text>
-              </TouchableOpacity>
-            </View>
+                </Text>
+                <TouchableOpacity
+                  style={styles.buttonCorrect}
+                  onPress={() => this.flipCard()}
+                >
+                  <Text style={styles.buttonTextSubmit}>Question</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonCorrect}
+                  onPress={() => this.handleSubmit(true)}
+                >
+                  <Text style={styles.buttonTextSubmit}>Correct</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonIncorrect}
+                  onPress={() => this.handleSubmit(false)}
+                >
+                  <Text style={styles.buttonTextSubmit}>Incorrect</Text>
+                </TouchableOpacity>
+              </View>
+            </Animated.View>
           </View>}
       </View>
     );
