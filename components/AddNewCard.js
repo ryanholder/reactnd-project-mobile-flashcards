@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 
-import { addNewCardToAsyncStorage } from '../utils/api';
+import { addCardToDeck } from '../utils/api';
 import { white, purple } from '../utils/colors';
 import { addNewCard } from '../actions/decks';
 
@@ -64,7 +64,7 @@ class AddNewCard extends React.Component {
     const { dispatch, title, navigation } = this.props;
     const { question, answer } = this.state;
 
-    addNewCardToAsyncStorage(title, question, answer)
+    addCardToDeck(title, question, answer)
       .then(dispatch(addNewCard(title, question, answer)))
       .then(navigation.goBack())
       .then(() => this.setState(() => ({

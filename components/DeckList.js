@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { AppLoading } from 'expo';
 import { connect } from 'react-redux';
 import { View, StyleSheet, Text, Platform, ScrollView, TouchableOpacity } from 'react-native';
-import { fetchDecksFromAsyncStorage } from '../utils/api';
+import { getDecks } from '../utils/api';
 import { receiveDecks } from '../actions/decks';
 import { white, black } from '../utils/colors';
 
@@ -46,7 +46,7 @@ class DeckList extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
 
-    fetchDecksFromAsyncStorage()
+    getDecks()
       .then(decks => dispatch(receiveDecks(decks)))
       .then(() => this.setState(() => ({ ready: true })));
   }

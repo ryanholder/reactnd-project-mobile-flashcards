@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-nativ
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
-import { addNewDeckToAsyncStorage } from '../utils/api';
+import { saveDeckTitle } from '../utils/api';
 import { white, purple } from '../utils/colors';
 import { addNewDeck } from '../actions/decks';
 
@@ -63,7 +63,7 @@ class AddNewDeck extends React.Component {
     const { dispatch } = this.props;
     const { title } = this.state;
 
-    addNewDeckToAsyncStorage(title)
+    saveDeckTitle(title)
       .then(dispatch(addNewDeck(title)))
       .then(this.toHome())
       .then(() => this.setState(() => ({ title: '' })));
