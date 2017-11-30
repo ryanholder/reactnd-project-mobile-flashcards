@@ -5,16 +5,25 @@ import { purple } from './utils/colors';
 import configureStore from './configureStore';
 import MainNavigator from './navigation/MainNavigator';
 import FlashcardsStatusBar from './components/FlashcardsStatusBar';
+import { setLocalNotification } from './utils/notifications';
 
-const store = configureStore();
+class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification();
+  }
 
-const App = () => (
-  <Provider store={store}>
-    <View style={{ flex: 1 }}>
-      <FlashcardsStatusBar backgroundColor={purple} barStyle="light-content" />
-      <MainNavigator />
-    </View>
-  </Provider>
-);
+  render() {
+    const store = configureStore();
+
+    return (
+      <Provider store={store}>
+        <View style={{ flex: 1 }}>
+          <FlashcardsStatusBar backgroundColor={purple} barStyle="light-content" />
+          <MainNavigator />
+        </View>
+      </Provider>
+    );
+  }
+}
 
 export default App;

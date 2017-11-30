@@ -12,6 +12,10 @@ import {
 } from 'react-native';
 
 import { white, green, red } from '../utils/colors';
+import {
+  clearLocalNotification,
+  setLocalNotification,
+} from '../utils/notifications';
 
 const styles = StyleSheet.create({
   item: {
@@ -113,6 +117,9 @@ class QuizCards extends React.Component {
         correctAnswers: answer ? prevState.correctAnswers + 1 : prevState.correctAnswers,
       };
     });
+
+    clearLocalNotification()
+      .then(setLocalNotification);
   }
 
   render() {
