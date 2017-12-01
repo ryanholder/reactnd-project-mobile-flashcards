@@ -79,6 +79,7 @@ class AddNewDeck extends React.Component {
           style={styles.input}
           placeholder="Deck Title"
           onChangeText={this.handleTitleChange}
+          underlineColorAndroid="transparent"
         />
         <TouchableOpacity style={styles.buttonSubmit} onPress={this.handleSubmit}>
           <Text style={styles.buttonTextSubmit}>Submit</Text>
