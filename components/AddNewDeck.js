@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
@@ -72,7 +72,10 @@ class AddNewDeck extends React.Component {
   render() {
     const { title } = this.state;
     return (
-      <View style={[styles.center, styles.container]}>
+      <KeyboardAvoidingView
+        style={[styles.center, styles.container]}
+        behavior="padding"
+      >
         <Text style={styles.label}>Enter a name for your new deck</Text>
         <TextInput
           value={title}
@@ -84,7 +87,7 @@ class AddNewDeck extends React.Component {
         <TouchableOpacity style={styles.buttonSubmit} onPress={this.handleSubmit}>
           <Text style={styles.buttonTextSubmit}>Submit</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
