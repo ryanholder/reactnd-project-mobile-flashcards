@@ -76,7 +76,6 @@ class DeckList extends React.Component {
               onPress={() => {
                 navigation.navigate('DeckListItem', {
                   title: decks.items[deck].title,
-                  noCards: decks.items[deck].cards.length,
                 });
               }}
             >
