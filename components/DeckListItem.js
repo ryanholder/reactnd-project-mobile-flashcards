@@ -57,12 +57,13 @@ class DeckListItem extends React.Component {
         >
           <Text style={styles.buttonTextSubmit}>Add Card</Text>
         </TouchableOpacity>
+        {deck.cards.length > 0 &&
         <TouchableOpacity
           style={styles.buttonSubmit}
           onPress={() => navigation.navigate('QuizCards', { deck })}
         >
           <Text style={styles.buttonTextSubmit}>Start Quiz</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
     );
   }
