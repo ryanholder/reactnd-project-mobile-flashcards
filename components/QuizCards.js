@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 
-import { white, green, red } from '../utils/colors';
+import { white, green, red, orange } from '../utils/colors';
 import {
   clearLocalNotification,
   setLocalNotification,
@@ -83,6 +83,13 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'center',
   },
+  buttonSubmit: {
+    alignItems: 'center',
+    backgroundColor: orange,
+    borderRadius: 5,
+    marginTop: 10,
+    padding: 10,
+  },
   buttonTextSubmit: {
     fontSize: 20,
     color: white,
@@ -132,13 +139,22 @@ class QuizCards extends React.Component {
       .then(setLocalNotification);
   }
 
+  handleRestart = () => {
+    this.setState({
+      counter: 0,
+      lastCard: false,
+      correctAnswers: 0,
+      flip: false,
+    });
+  }
+
   render() {
     const {
       lastCard,
       correctAnswers,
       counter,
     } = this.state;
-    const { deck, noCards } = this.props;
+    const { deck, noCards, navigation } = this.props;
     const card = deck.cards[this.state.counter];
 
     return (
@@ -149,6 +165,18 @@ class QuizCards extends React.Component {
               Quiz Completed!!
             </Text>
             <Text>{`You scored ${correctAnswers} out of ${noCards}`}</Text>
+            <TouchableOpacity
+              style={styles.buttonSubmit}
+              onPress={() => this.handleRestart()}
+            >
+              <Text style={styles.buttonTextSubmit}>Restart Quiz</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttonSubmit}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={styles.buttonTextSubmit}>Back to Deck</Text>
+            </TouchableOpacity>
           </View> :
           <FlipCard
             style={[styles.card, styles.item]}
@@ -229,6 +257,13 @@ QuizCards.propTypes = {
     cards: PropTypes.array,
   }).isRequired,
   noCards: PropTypes.number.isRequired,
+  navigation: PropTypes.shape({
+    dispatch: PropTypes.func,
+    goBack: PropTypes.func,
+    navigate: PropTypes.func,
+    setParams: PropTypes.func,
+    state: PropTypes.object,
+  }).isRequired,
 };
 
 const mapStateToProps = (state, { navigation }) => {
