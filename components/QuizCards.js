@@ -124,6 +124,7 @@ class QuizCards extends React.Component {
         counter: prevState.counter + 1,
         lastCard: prevState.counter + 1 === noCards,
         correctAnswers: answer ? prevState.correctAnswers + 1 : prevState.correctAnswers,
+        flip: false,
       };
     });
 
