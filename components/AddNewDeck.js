@@ -48,9 +48,11 @@ class AddNewDeck extends React.Component {
     title: '',
   }
 
-  toHome = () => {
+  toDeckListItem = (title) => {
     const { navigation } = this.props;
-    navigation.dispatch(NavigationActions.back({ key: 'AddNewDeck' }));
+    navigation.navigate('DeckListItem', {
+      title,
+    });
   }
 
   handleTitleChange = (title) => {
@@ -65,7 +67,7 @@ class AddNewDeck extends React.Component {
 
     saveDeckTitle(title)
       .then(dispatch(addNewDeck(title)))
-      .then(this.toHome())
+      .then(this.toDeckListItem(title))
       .then(() => this.setState(() => ({ title: '' })));
   }
 
