@@ -1,8 +1,17 @@
 # reactnd-project-mobile-flashcards
-Mobile Flashcards project application for Udacity React Nanodegree
+Mobile Flashcards project application for Udacity React Nanodegree. This project was built with React-Native, React Navigation and Redux.
+
+This is a submitted project for the [Udacity React Nanodegree](https://www.udacity.com/course/react-nanodegree--nd019)
 
 
 This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
+
+## Quickstart
+
+1. Clone this repository: `git clone https://github.com/ryanholder/reactnd-project-mobile-flashcards`
+2. cd into folder
+3. Install libraries: `yarn install`
+4. Start packager: `yarn start`
 
 Below you'll find information about performing common tasks. The most recent version of this guide is available [here](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md).
 
