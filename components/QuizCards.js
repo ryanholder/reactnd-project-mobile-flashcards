@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Button,
   Platform,
 } from 'react-native';
 
@@ -74,12 +73,19 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'center',
   },
+  buttonFlip: {
+    alignItems: 'center',
+    backgroundColor: white,
+    borderRadius: 5,
+    marginTop: 10,
+    marginLeft: 20,
+    marginRight: 20,
+    padding: 10,
+    justifyContent: 'center',
+  },
   buttonTextSubmit: {
     fontSize: 20,
     color: white,
-  },
-  toggleQuestionAnswer: {
-    color: red,
   },
   cardCount: {
     alignSelf: 'flex-start',
@@ -96,6 +102,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+  },
+  flipText: {
+    color: red,
   },
 });
 
@@ -157,11 +166,12 @@ class QuizCards extends React.Component {
                 <Text style={styles.label}>
                   {card.question}
                 </Text>
-                <Button
-                  color={red}
+                <TouchableOpacity
+                  style={styles.buttonFlip}
                   onPress={() => { this.setState({ flip: !this.state.flip }); }}
-                  title="Answer"
-                />
+                >
+                  <Text style={styles.flipText}>Answer</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.buttonCorrect}
                   onPress={() => this.handleSubmit(true)}
@@ -185,11 +195,12 @@ class QuizCards extends React.Component {
                 <Text style={styles.label}>
                   {card.answer}
                 </Text>
-                <Button
-                  color={red}
+                <TouchableOpacity
+                  style={styles.buttonFlip}
                   onPress={() => { this.setState({ flip: !this.state.flip }); }}
-                  title="Question"
-                />
+                >
+                  <Text style={styles.flipText}>Question</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.buttonCorrect}
                   onPress={() => this.handleSubmit(true)}
