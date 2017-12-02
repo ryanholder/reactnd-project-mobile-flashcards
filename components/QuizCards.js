@@ -171,7 +171,7 @@ class QuizCards extends React.Component {
                   style={styles.buttonFlip}
                   onPress={() => { this.setState({ flip: !this.state.flip }); }}
                 >
-                  <Text style={styles.flipText}>Answer</Text>
+                  <Text style={styles.flipText}>Show Answer</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.buttonCorrect}
@@ -200,7 +200,7 @@ class QuizCards extends React.Component {
                   style={styles.buttonFlip}
                   onPress={() => { this.setState({ flip: !this.state.flip }); }}
                 >
-                  <Text style={styles.flipText}>Question</Text>
+                  <Text style={styles.flipText}>Show Question</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.buttonCorrect}
