@@ -12,12 +12,12 @@ class DeckList extends React.Component {
     ready: false,
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { dispatch } = this.props;
-
-    getDecks()
-      .then(decks => dispatch(receiveDecks(decks)))
-      .then(() => this.setState(() => ({ ready: true })));
+    getDecks().then(decks => dispatch(receiveDecks(decks)));
+    if (this.props.decks) {
+      this.setState({ ready: true });
+    }
   }
 
   renderDeckList = ({ item }) => (
