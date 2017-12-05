@@ -31,8 +31,9 @@ class AddNewDeck extends React.Component {
 
     saveDeckTitle(title)
       .then(dispatch(addNewDeck(title)))
-      .then(this.toDeckListItem(title))
-      .then(() => this.setState(() => ({ title: '' })));
+      .then(this.toDeckListItem(title));
+
+    this.setState({ title: '' });
   }
 
   render() {
