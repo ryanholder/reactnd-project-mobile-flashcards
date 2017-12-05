@@ -4,116 +4,16 @@ import { connect } from 'react-redux';
 import FlipCard from 'react-native-flip-card';
 import {
   View,
-  StyleSheet,
   Text,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
 
-import { white, green, red, orange } from '../utils/colors';
+import styles from '../utils/stylesheet';
+
 import {
   clearLocalNotification,
   setLocalNotification,
 } from '../utils/notifications';
-
-const styles = StyleSheet.create({
-  item: {
-    backgroundColor: white,
-    borderRadius: Platform.OS === 'ios' ? 16 : 2,
-    padding: 20,
-    margin: 20,
-    borderWidth: 0,
-    shadowRadius: 3,
-    shadowOpacity: 0.8,
-    shadowColor: 'rgba(0, 0, 0, 0.24)',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    flex: 1,
-    alignItems: 'stretch',
-  },
-  center: {
-    flex: 1,
-  },
-  question: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 30,
-    textAlign: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 44,
-    marginTop: 10,
-    padding: 8,
-    width: '100%',
-  },
-  buttonCorrect: {
-    alignItems: 'center',
-    backgroundColor: green,
-    borderRadius: 5,
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    padding: 10,
-    justifyContent: 'center',
-  },
-  buttonIncorrect: {
-    alignItems: 'center',
-    backgroundColor: red,
-    borderRadius: 5,
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    padding: 10,
-    justifyContent: 'center',
-  },
-  buttonFlip: {
-    alignItems: 'center',
-    backgroundColor: white,
-    borderRadius: 5,
-    marginTop: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    padding: 10,
-    justifyContent: 'center',
-  },
-  buttonSubmit: {
-    alignItems: 'center',
-    backgroundColor: orange,
-    borderRadius: 5,
-    marginTop: 10,
-    padding: 10,
-  },
-  buttonTextSubmit: {
-    fontSize: 20,
-    color: white,
-  },
-  cardCount: {
-    alignSelf: 'flex-start',
-  },
-  face: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  back: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  quizResults: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  flipText: {
-    color: red,
-  },
-});
 
 class QuizCards extends React.Component {
   state = {
@@ -156,30 +56,46 @@ class QuizCards extends React.Component {
     } = this.state;
     const { deck, noCards, navigation } = this.props;
     const card = deck.cards[this.state.counter];
+    const {
+      quizCenter,
+      quizItem,
+      quizResults,
+      label,
+      buttonSubmit,
+      buttonTextSubmit,
+      face,
+      back,
+      cardCount,
+      question,
+      buttonFlip,
+      flipText,
+      buttonCorrect,
+      buttonIncorrect,
+    } = styles;
 
     return (
-      <View style={styles.center}>
+      <View style={quizCenter}>
         {lastCard ?
-          <View style={[styles.item, styles.quizResults]}>
-            <Text style={styles.label}>
+          <View style={[quizItem, quizResults]}>
+            <Text style={label}>
               Quiz Completed!!
             </Text>
             <Text>{`You scored ${correctAnswers} out of ${noCards}`}</Text>
             <TouchableOpacity
-              style={styles.buttonSubmit}
+              style={buttonSubmit}
               onPress={() => this.handleRestart()}
             >
-              <Text style={styles.buttonTextSubmit}>Restart Quiz</Text>
+              <Text style={buttonTextSubmit}>Restart Quiz</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.buttonSubmit}
+              style={buttonSubmit}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.buttonTextSubmit}>Back to Deck</Text>
+              <Text style={buttonTextSubmit}>Back to Deck</Text>
             </TouchableOpacity>
           </View> :
           <FlipCard
-            style={[styles.card, styles.item]}
+            style={quizItem}
             friction={6}
             perspective={1000}
             flipHorizontal
@@ -187,60 +103,60 @@ class QuizCards extends React.Component {
             flip={this.state.flip}
             clickable={false}
           >
-            <View style={styles.face}>
-              <View style={styles.cardCount}>
+            <View style={face}>
+              <View style={cardCount}>
                 <Text>{`Card ${counter + 1} of ${noCards}`}</Text>
               </View>
-              <View style={styles.question}>
-                <Text style={styles.label}>
+              <View style={question}>
+                <Text style={label}>
                   {card.question}
                 </Text>
                 <TouchableOpacity
-                  style={styles.buttonFlip}
+                  style={buttonFlip}
                   onPress={() => { this.setState({ flip: !this.state.flip }); }}
                 >
-                  <Text style={styles.flipText}>Show Answer</Text>
+                  <Text style={flipText}>Show Answer</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.buttonCorrect}
+                  style={buttonCorrect}
                   onPress={() => this.handleSubmit(true)}
                 >
-                  <Text style={styles.buttonTextSubmit}>Correct</Text>
+                  <Text style={buttonTextSubmit}>Correct</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.buttonIncorrect}
+                  style={buttonIncorrect}
                   onPress={() => this.handleSubmit(false)}
                 >
-                  <Text style={styles.buttonTextSubmit}>Incorrect</Text>
+                  <Text style={buttonTextSubmit}>Incorrect</Text>
                 </TouchableOpacity>
               </View>
             </View>
 
-            <View style={styles.back}>
-              <View style={styles.cardCount}>
+            <View style={back}>
+              <View style={cardCount}>
                 <Text>{`Card ${counter + 1} of ${noCards}`}</Text>
               </View>
-              <View style={styles.question}>
-                <Text style={styles.label}>
+              <View style={question}>
+                <Text style={label}>
                   {card.answer}
                 </Text>
                 <TouchableOpacity
-                  style={styles.buttonFlip}
+                  style={buttonFlip}
                   onPress={() => { this.setState({ flip: !this.state.flip }); }}
                 >
-                  <Text style={styles.flipText}>Show Question</Text>
+                  <Text style={flipText}>Show Question</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.buttonCorrect}
+                  style={buttonCorrect}
                   onPress={() => this.handleSubmit(true)}
                 >
-                  <Text style={styles.buttonTextSubmit}>Correct</Text>
+                  <Text style={buttonTextSubmit}>Correct</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.buttonIncorrect}
+                  style={buttonIncorrect}
                   onPress={() => this.handleSubmit(false)}
                 >
-                  <Text style={styles.buttonTextSubmit}>Incorrect</Text>
+                  <Text style={buttonTextSubmit}>Incorrect</Text>
                 </TouchableOpacity>
               </View>
             </View>

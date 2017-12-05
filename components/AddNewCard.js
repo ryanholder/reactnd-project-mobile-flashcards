@@ -1,46 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
+import { KeyboardAvoidingView, Text, TouchableOpacity, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 
 import { addCardToDeck } from '../utils/api';
-import { white, purple } from '../utils/colors';
 import { addNewCard } from '../actions/decks';
-
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    padding: 40,
-    backgroundColor: white,
-  },
-  label: {
-    fontSize: 28,
-    textAlign: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderRadius: 5,
-    height: 44,
-    marginTop: 10,
-    padding: 8,
-    width: '100%',
-  },
-  buttonSubmit: {
-    alignItems: 'center',
-    backgroundColor: purple,
-    borderRadius: 5,
-    marginTop: 10,
-    padding: 10,
-  },
-  buttonTextSubmit: {
-    fontSize: 20,
-    color: white,
-  },
-});
+import styles from '../utils/stylesheet';
 
 class AddNewCard extends React.Component {
   state = {
@@ -75,27 +40,35 @@ class AddNewCard extends React.Component {
 
   render() {
     const { question, answer } = this.state;
+    const {
+      center,
+      container,
+      label,
+      input,
+      buttonSubmit,
+      buttonTextSubmit,
+    } = styles;
     return (
       <KeyboardAvoidingView
-        style={[styles.center, styles.container]}
+        style={[center, container]}
         behavior="padding"
       >
-        <Text style={styles.label}>Question</Text>
+        <Text style={label}>Question</Text>
         <TextInput
           value={question}
-          style={styles.input}
+          style={input}
           placeholder="Question"
           onChangeText={this.handleQuestionChange}
         />
-        <Text style={styles.label}>Answer</Text>
+        <Text style={label}>Answer</Text>
         <TextInput
           value={answer}
-          style={styles.input}
+          style={input}
           placeholder="Answer"
           onChangeText={this.handleAnswerChange}
         />
-        <TouchableOpacity style={styles.buttonSubmit} onPress={this.handleSubmit}>
-          <Text style={styles.buttonTextSubmit}>Submit</Text>
+        <TouchableOpacity style={buttonSubmit} onPress={this.handleSubmit}>
+          <Text style={buttonTextSubmit}>Submit</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     );

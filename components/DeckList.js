@@ -2,41 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { AppLoading } from 'expo';
 import { connect } from 'react-redux';
-import { View, StyleSheet, Text, Platform, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { getDecks } from '../utils/api';
 import { receiveDecks } from '../actions/decks';
-import { white, black } from '../utils/colors';
-
-const styles = StyleSheet.create({
-  item: {
-    backgroundColor: white,
-    borderRadius: Platform.OS === 'ios' ? 16 : 2,
-    padding: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 17,
-    justifyContent: 'center',
-    shadowRadius: 3,
-    shadowOpacity: 0.8,
-    shadowColor: 'rgba(0, 0, 0, 0.24)',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-  },
-  noDataText: {
-    fontSize: 20,
-  },
-  list: {
-    flex: 1,
-    alignSelf: 'stretch',
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: black,
-  },
-});
+import styles from '../utils/stylesheet';
 
 class DeckList extends React.Component {
   state = {
@@ -60,6 +29,10 @@ class DeckList extends React.Component {
   render() {
     const { ready } = this.state;
     const { decks, navigation } = this.props;
+    const {
+      item,
+      noDataText,
+    } = styles;
 
     if (ready === false) {
       return <AppLoading />;
@@ -72,18 +45,17 @@ class DeckList extends React.Component {
           {Object.keys(decks.items).map(deck => (
             <TouchableOpacity
               key={deck}
-              style={styles.deck}
               onPress={() => {
                 navigation.navigate('DeckListItem', {
                   title: decks.items[deck].title,
                 });
               }}
             >
-              <View style={styles.item} key={deck}>
-                <Text style={styles.noDataText}>
+              <View style={item} key={deck}>
+                <Text style={noDataText}>
                   {decks.items[deck].title}
                 </Text>
-                <Text style={styles.noDataText}>
+                <Text style={noDataText}>
                   {decks.items[deck].cards.length} cards
                 </Text>
               </View>
